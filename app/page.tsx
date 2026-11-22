@@ -35,7 +35,6 @@ export default function Home() {
               <a key={n.href} href={n.href} className="text-[#5b5f66] hover:text-[#0b0b0c]">{n.label}</a>
             ))}
           </nav>
-          <a href="/upload" className="text-sm text-[#5b5f66] hover:text-[#0b0b0c]">Admin</a>
           <a href="#pilot" className="rounded-full bg-[#0b0b0c] px-4 py-2 text-sm font-medium text-white hover:bg-[#1d4ed8]">
             Request a free pilot
           </a>

@@ -19,20 +19,34 @@
 // logged per step, plus one paid pilot at $7,500, concept price, from a
 // named lab asking to upload its own place.
 
+import { cookies } from "next/headers";
 import UploadFlow from "../../components/UploadFlow";
+import { SESSION_COOKIE, verifyToken } from "../../lib/auth";
+
+export const instant = false;
 
 export const metadata = {
   title: "Admin upload | WorldLoop",
   description: "Admin only. Richardson uploads a capture and the workflow starts.",
 };
 
-export default function UploadPage() {
+export default async function UploadPage() {
+  const jar = await cookies();
+  const token = jar.get(SESSION_COOKIE)?.value;
+  const session = token ? await verifyToken(token, "session") : null;
   return (
     <div className="min-h-full bg-white text-[#0b0b0c]">
       <header className="border-b border-[#e5e7eb]">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-3 sm:px-8">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-5 py-3 sm:px-8">
           <a href="/" className="text-lg font-semibold tracking-tight">WorldLoop</a>
-          <span className="rounded-full bg-[#0b0b0c] px-3 py-1 text-xs font-medium text-white">Admin</span>
+          <div className="flex items-center gap-3 text-sm">
+            <a href="/admin/account" className="text-[#5b5f66] hover:text-[#0b0b0c]">
+              {session ? session.email : "Admin"}
+            </a>
+            <form action="/api/auth/logout" method="post">
+              <button type="submit" className="text-[#5b5f66] hover:text-[#0b0b0c]">Sign out</button>
+            </form>
+          </div>
         </div>
       </header>
       <main>
