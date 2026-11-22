@@ -19,7 +19,7 @@ import {
   type WorkflowStep,
 } from "../lib/workflow";
 
-type Phase = "idle" | "running" | "waiting" | "rejected" | "done";
+type Phase = "idle" | "running" | "waiting" | "rejected" | "sentback" | "done";
 
 const STATE_LABEL: Record<StepState, string> = {
   queued: "Queued",
@@ -178,6 +178,47 @@ function SimWorldCheck() {
   );
 }
 
+// A command in a dark box with a copy button, so the user can paste it
+// into a terminal instead of typing it out.
+function CopyCommand({ label, command }: { label: string; command: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard unavailable. The text stays selectable.
+    }
+  };
+  return (
+    <div className="mt-3">
+      <p className="text-sm font-medium">{label}</p>
+      <div className="mt-1 flex items-center gap-2 rounded-xl bg-[#0b0b0c] px-3 py-2">
+        <code className="min-w-0 flex-1 overflow-x-auto font-mono text-xs text-white">{command}</code>
+        <button
+          type="button"
+          onClick={copy}
+          aria-label={`Copy command: ${label}`}
+          className="flex shrink-0 items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20"
+        >
+          {copied ? (
+            <>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden="true"><path d="M20 6L9 17l-5-5" /></svg>
+              Copied
+            </>
+          ) : (
+            <>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
+              Copy
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Step 17: the real success test for the demo task, run in MuJoCo 4.0.1.
 // The test and both forced results are files in the same pack folder.
 // Run it yourself: python3 success-test.py pass
@@ -185,15 +226,24 @@ function SuccessTestCheck() {
   return (
     <div className="mt-3 overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white">
       <div className="p-4">
-        <p className="font-medium">The success test, ready to read</p>
+        <p className="font-medium">Does the test tell good from bad?</p>
         <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
-          The test passes only when the earphone tip is at the dock target:
-          within 2 cm sideways, 1 cm front to back, 1 cm in height, and the
-          earphone stands upright within 15 degrees of vertical.
+          Your job here: the test must pass a good placement and fail a bad
+          one. If it does both, tap Approve below. If it cannot tell them
+          apart, tap &quot;This looks wrong&quot;.
+        </p>
+        <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
+          <span className="font-medium text-[#0b0b0c]">What is this test? </span>
+          This test is the judge. When the robot runs, no human watches. This
+          test alone decides whether the robot put the earphone in the charger.
+          If the judge is wrong, every score in the eval is wrong.
         </p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-[#bbf7d0] bg-[#f0fdf4] p-3">
-            <p className="text-sm font-medium text-[#166534]">Forced pass: PASS</p>
+            <p className="text-sm font-medium text-[#166534]">Good placement: PASS</p>
+            <p className="mt-1 text-sm leading-6 text-[#166534]">
+              The earphone sits in the dock, upright. All four checks pass.
+            </p>
             <p className="mt-1 font-mono text-xs leading-5 text-[#166534]">
               Tip x 0.620 m, y 0.080 m, z 0.808 m<br />
               Sideways off by 0.000 m, limit 0.020 m<br />
@@ -203,7 +253,11 @@ function SuccessTestCheck() {
             </p>
           </div>
           <div className="rounded-xl border border-[#fecaca] bg-[#fef2f2] p-3">
-            <p className="text-sm font-medium text-[#991b1b]">Forced fail: FAIL</p>
+            <p className="text-sm font-medium text-[#991b1b]">Bad placement: FAIL</p>
+            <p className="mt-1 text-sm leading-6 text-[#991b1b]">
+              The earphone is 5 cm off to the side and tilted 40 degrees. Two
+              checks fail, so the test catches it.
+            </p>
             <p className="mt-1 font-mono text-xs leading-5 text-[#991b1b]">
               Tip x 0.565 m, y 0.080 m, z 0.806 m<br />
               Sideways off by 0.055 m, limit 0.020 m<br />
@@ -214,9 +268,29 @@ function SuccessTestCheck() {
           </div>
         </div>
         <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
-          What to look for: the pass shows all four checks inside their
-          limits, and the fail shows at least one check outside its limit.
-          If the test cannot tell a good place from a bad one, send it back.
+          Green passes and red fails, so this test works. The test passes
+          only when the earphone tip is at the dock target: within 2 cm
+          sideways, 1 cm front to back, 1 cm in height, and upright within
+          15 degrees of vertical.
+        </p>
+        <div className="mt-4 rounded-xl border border-[#e5e7eb] bg-[#f6f7f9] p-3">
+          <p className="text-sm font-medium">Run it yourself on your Mac</p>
+          <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
+            Download success-test.py and world.xml into the same folder first.
+            The test reads the dock target from world.xml, so the two files
+            must sit together. It works with or without MuJoCo. Tap Copy on a
+            command, paste it into your terminal, and press Enter.
+          </p>
+          <CopyCommand label="Open the world in MuJoCo again" command="cd ~/Downloads && source mujoco-venv/bin/activate && python3 -m mujoco.viewer --mjcf world.xml" />
+          <CopyCommand label="Run the test with MuJoCo" command="cd ~/Downloads && source mujoco-venv/bin/activate && python3 success-test.py pass" />
+          <CopyCommand label="Run the test without MuJoCo (plain Python)" command="python3 success-test.py pass --engine geometric" />
+          <p className="mt-2 text-sm leading-6 text-[#5b5f66]">
+            Swap pass for fail to run the bad placement. Both print their
+            verdict at the end.
+          </p>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
+          The test file, the world, and both results, if you want to read them:
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <a
@@ -225,6 +299,13 @@ function SuccessTestCheck() {
             className="rounded-full bg-[#0b0b0c] px-4 py-2 text-sm font-medium text-white hover:bg-[#1d4ed8]"
           >
             Download success-test.py
+          </a>
+          <a
+            href="/packs/demo-earphone-charger/world.xml"
+            download="world.xml"
+            className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10 hover:bg-[#f6f7f9]"
+          >
+            Download world.xml
           </a>
           <a
             href="/packs/demo-earphone-charger/forced-pass.txt"
@@ -242,8 +323,8 @@ function SuccessTestCheck() {
           </a>
         </div>
         <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
-          Both results were run in MuJoCo 4.0.1 against the step 13 world,
-          forward kinematics only. Run it yourself: <code className="rounded bg-[#f6f7f9] px-1 font-mono text-xs">python3 success-test.py pass</code>
+          Both results above were run in MuJoCo 4.0.1 against the step 13
+          world, forward kinematics only.
         </p>
       </div>
     </div>
@@ -376,6 +457,19 @@ export default function UploadFlow() {
     advance(idx);
   };
 
+  const sendBackCurrent = () => {
+    // Human check failed: mark the waiting step failed and stop the run.
+    // Nothing is approved. The user can start over when ready.
+    clearTimer();
+    const idx = current;
+    setStates((prev) => {
+      const copy = [...prev];
+      copy[idx] = "failed";
+      return copy;
+    });
+    setPhase("sentback");
+  };
+
   const reset = () => {
     clearTimer();
     setPhase("idle");
@@ -393,6 +487,9 @@ export default function UploadFlow() {
   };
 
   const waitingStep = phase === "waiting" ? WORKFLOW_STEPS[current] : null;
+  const nextCheck = waitingStep
+    ? HUMAN_CHECK_STEPS.find((id) => id > waitingStep.id) ?? null
+    : null;
 
   const input = "w-full rounded-xl border border-[#e5e7eb] bg-white px-4 py-3 text-base outline-none focus:border-[#1d4ed8] focus:ring-2 focus:ring-[#dbeafe]";
 
@@ -434,9 +531,10 @@ export default function UploadFlow() {
           MuJoCo, Genesis, and eval runs are the next build step, not done here.
           One exception: step 13 has a real sample MuJoCo world file, built
           offline, so you can open it and check it. A second exception: step
-          17 has a real success test with forced pass and forced fail results,
-          run in MuJoCo, so you can read them and check them. Times shown are targets
-          from the spec, labeled illustrative, not measured times.
+          17 has a real success test with a good placement that passes and a
+          bad placement that fails, run in MuJoCo, so you can read them and
+          check them. Times shown are targets from the spec, labeled
+          illustrative, not measured times.
         </p>
       </div>
 
@@ -461,7 +559,7 @@ export default function UploadFlow() {
         </div>
       )}
 
-      {(phase === "running" || phase === "waiting" || phase === "done") && (
+      {(phase === "running" || phase === "waiting" || phase === "done" || phase === "sentback") && (
         <div className="mt-8">
           <h2 className="text-2xl font-medium tracking-tight">Where your pack is</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-5">
@@ -573,7 +671,7 @@ export default function UploadFlow() {
         </div>
       )}
 
-      {(phase === "running" || phase === "waiting" || phase === "done") && (
+      {(phase === "running" || phase === "waiting" || phase === "done" || phase === "sentback") && (
         <div className="mt-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -594,7 +692,9 @@ export default function UploadFlow() {
           <p className="mt-2 text-sm text-[#5b5f66]">
             {phase === "done"
               ? "Done. Your pack is ready in this demo."
-              : `About ${minutesLeft} min left, target time, not measured. ${activePhase ? `Now in phase ${activePhase.id}: ${activePhase.title}.` : ""}`}
+              : phase === "sentback"
+                ? "Stopped. The run was sent back at your check."
+                : `About ${minutesLeft} min left, target time, not measured. ${activePhase ? `Now in phase ${activePhase.id}: ${activePhase.title}.` : ""}`}
           </p>
 
           {waitingStep && (
@@ -603,9 +703,33 @@ export default function UploadFlow() {
               <p className="mt-1 leading-7 text-[#5b5f66]">{waitingStep.plain}</p>
               {waitingStep.id === 13 && <SimWorldCheck />}
               {waitingStep.id === 17 && <SuccessTestCheck />}
-              <p className="mt-2 text-sm text-[#5b5f66]">Take a look, then tap below to keep going. Nothing moves past this step until you say so.</p>
-              <button type="button" onClick={approveCurrent} className="mt-4 rounded-full bg-[#1d4ed8] px-6 py-3 text-base font-medium text-white hover:bg-[#1e40af]">
-                Approve and continue
+              <p className="mt-2 text-sm text-[#5b5f66]">
+                Nothing moves past this step until you say so.{" "}
+                {nextCheck
+                  ? `After you approve, the workflow runs on its own until step ${nextCheck}, the next time it needs you.`
+                  : "This is the last check. After you approve, the pack is done."}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button type="button" onClick={approveCurrent} className="rounded-full bg-[#1d4ed8] px-6 py-3 text-base font-medium text-white hover:bg-[#1e40af]">
+                  Approve and continue
+                </button>
+                <button type="button" onClick={sendBackCurrent} className="rounded-full bg-white px-6 py-3 text-base font-medium ring-1 ring-black/10 hover:bg-[#fef2f2] hover:text-[#991b1b]">
+                  This looks wrong
+                </button>
+              </div>
+            </div>
+          )}
+
+          {phase === "sentback" && (
+            <div className="mt-6 rounded-2xl border border-[#fecaca] bg-[#fef2f2] p-6">
+              <p className="text-xl font-medium">Sent back.</p>
+              <p className="mt-2 leading-7 text-[#5b5f66]">
+                The run stops here. Nothing was approved. In the real flow
+                this step goes back to the builder with your note. Start over
+                when you are ready.
+              </p>
+              <button type="button" onClick={reset} className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">
+                Start over
               </button>
             </div>
           )}
