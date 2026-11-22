@@ -7,7 +7,13 @@
 // This file runs in the browser only. Nothing is sent, no server runs the
 // workflow, and no MuJoCo, Genesis, or eval run happens in this demo. The
 // steps below are a local demo of the workflow order, with the real sim and
-// eval runs as the next build step, not claimed as done.
+// eval runs as the next build step, not claimed as done. Two exceptions:
+// step 13 ships a real sample MuJoCo world,
+// public/packs/demo-earphone-charger/world.xml, built and rendered offline
+// and verified to load in MuJoCo 4.0.1. Step 17 ships a real success test,
+// success-test.py, with forced pass and forced fail results run in MuJoCo
+// 4.0.1 against that world. Both are samples for the demo task, not built
+// from the upload, and the demo still runs no sim itself.
 
 export type StepOwner = "You" | "Automatic";
 export type StepState = "queued" | "running" | "done" | "needs you" | "failed";
@@ -34,11 +40,11 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
   { id: 10, title: "Scan to mesh", plain: "Build the visual mesh and the collision mesh from the scan.", owner: "Automatic", targetMinutes: 10, targetNote: "Target" },
   { id: 11, title: "Mesh scale check", plain: "Check the 3 tape lengths against the mesh. Fail if any is off by more than 2 cm on a 1 m length.", owner: "Automatic", targetMinutes: 2, targetNote: "Target" },
   { id: 12, title: "Sim world build in MuJoCo", plain: "Build the sim scene in MuJoCo first, with a library robot arm.", owner: "Automatic", targetMinutes: 10, targetNote: "Done by 9:30, target" },
-  { id: 13, title: "Your check of the first sim world", plain: "Open the MuJoCo world and check it matches the real place.", owner: "You", targetMinutes: 5, targetNote: "Human check" },
+  { id: 13, title: "Your check of the first sim world", plain: "Open world.xml, the sample MuJoCo world for this demo task, and check it matches the real place. The preview, the file, and the Mac open steps are on this page.", owner: "You", targetMinutes: 5, targetNote: "Human check" },
   { id: 14, title: "Genesis port", plain: "Port the MuJoCo scene to Genesis. If the port fails, ship MuJoCo only for the first pack.", owner: "Automatic", targetMinutes: 10, targetNote: "Target" },
   { id: 15, title: "Variation generation", plain: "Make 100 variations of the task from the one room, each with a fixed seed number.", owner: "Automatic", targetMinutes: 15, targetNote: "Done by 10:00, target" },
   { id: 16, title: "Success test in code", plain: "Write the success test before any model runs. It must decide alone, with no human watching.", owner: "Automatic", targetMinutes: 5, targetNote: "Target" },
-  { id: 17, title: "Your check of the success test", plain: "Read the success test and the forced pass and forced fail results, then approve or send back.", owner: "You", targetMinutes: 5, targetNote: "Human check" },
+  { id: 17, title: "Your check of the success test", plain: "Read success-test.py and the forced pass and forced fail results, then approve or send back. The test, the results, and the download links are on this page.", owner: "You", targetMinutes: 5, targetNote: "Human check" },
   { id: 18, title: "Eval run", plain: "Run an open model in inference only, 20 runs per task per variation set. No training.", owner: "Automatic", targetMinutes: 30, targetNote: "Runs while you film the next task, target" },
   { id: 19, title: "Failure clip cutting", plain: "Save every run. Cut a short clip for each failure, labeled with seed, variation, and stage.", owner: "Automatic", targetMinutes: 10, targetNote: "Target" },
   { id: 20, title: "Eval report draft", plain: "Draft the eval report from the run data only. No claim without a run and a clip behind it.", owner: "Automatic", targetMinutes: 5, targetNote: "Target" },

@@ -1,0 +1,14 @@
+Success test: putting an earphone in its charger
+World: public/packs/demo-earphone-charger/world.xml
+State: forced pass (earphone in the dock, upright)
+Engine: MuJoCo 4.0.1, model loaded, forward kinematics only
+
+Dock target: x 0.620 m, y 0.080 m, z 0.808 m
+Earphone tip: x 0.620 m, y 0.080 m, z 0.808 m
+
+Check sideways (x): off by 0.000 m, limit 0.020 m, PASS
+Check front to back (y): off by 0.000 m, limit 0.010 m, PASS
+Check height (z): off by 0.000 m, limit 0.010 m, PASS
+Check tilt: off by 0.000 deg, limit 15.000 deg, PASS
+
+Verdict: PASS, all 4 checks inside their limits

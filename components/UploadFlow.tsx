@@ -132,6 +132,124 @@ const MANUAL_PAGES = [
   },
 ];
 
+// Step 13: the sample MuJoCo world for the demo task. Real file, real
+// render, built and checked offline in MuJoCo. The viewer command below
+// was verified to launch: python -m mujoco.viewer --mjcf world.xml.
+function SimWorldCheck() {
+  return (
+    <div className="mt-3 overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white">
+      <img
+        src="/packs/demo-earphone-charger/world-preview.png"
+        alt="The MuJoCo world for putting an earphone in its charger: a wooden table with a white charger dock, a small white earphone, and a blue robot arm"
+        className="h-auto w-full"
+      />
+      <div className="p-4">
+        <p className="font-medium">The first sim world, ready to open</p>
+        <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
+          Sample world for this demo task, built and rendered in MuJoCo, not
+          from your upload. Check the table, the charger dock, the earphone,
+          and the arm against the real place.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a
+            href="/packs/demo-earphone-charger/world.xml"
+            download="world.xml"
+            className="rounded-full bg-[#0b0b0c] px-4 py-2 text-sm font-medium text-white hover:bg-[#1d4ed8]"
+          >
+            Download world.xml
+          </a>
+        </div>
+        <p className="mt-4 text-sm font-medium">Open it on your Mac</p>
+        <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm leading-6 text-[#5b5f66]">
+          <li>
+            Install MuJoCo: <code className="rounded bg-[#f6f7f9] px-1 font-mono text-xs">pip install mujoco</code>
+          </li>
+          <li>
+            Save world.xml in a folder, open a terminal in that folder, and
+            run: <code className="rounded bg-[#f6f7f9] px-1 font-mono text-xs">python3 -m mujoco.viewer --mjcf world.xml</code>
+          </li>
+          <li>
+            The viewer opens the world. Drag to orbit, scroll to zoom, and
+            check the table, dock, earphone, and arm.
+          </li>
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+// Step 17: the real success test for the demo task, run in MuJoCo 4.0.1.
+// The test and both forced results are files in the same pack folder.
+// Run it yourself: python3 success-test.py pass
+function SuccessTestCheck() {
+  return (
+    <div className="mt-3 overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white">
+      <div className="p-4">
+        <p className="font-medium">The success test, ready to read</p>
+        <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
+          The test passes only when the earphone tip is at the dock target:
+          within 2 cm sideways, 1 cm front to back, 1 cm in height, and the
+          earphone stands upright within 15 degrees of vertical.
+        </p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-[#bbf7d0] bg-[#f0fdf4] p-3">
+            <p className="text-sm font-medium text-[#166534]">Forced pass: PASS</p>
+            <p className="mt-1 font-mono text-xs leading-5 text-[#166534]">
+              Tip x 0.620 m, y 0.080 m, z 0.808 m<br />
+              Sideways off by 0.000 m, limit 0.020 m<br />
+              Front to back off by 0.000 m, limit 0.010 m<br />
+              Height off by 0.000 m, limit 0.010 m<br />
+              Tilt 0.0 deg, limit 15.0 deg
+            </p>
+          </div>
+          <div className="rounded-xl border border-[#fecaca] bg-[#fef2f2] p-3">
+            <p className="text-sm font-medium text-[#991b1b]">Forced fail: FAIL</p>
+            <p className="mt-1 font-mono text-xs leading-5 text-[#991b1b]">
+              Tip x 0.565 m, y 0.080 m, z 0.806 m<br />
+              Sideways off by 0.055 m, limit 0.020 m<br />
+              Front to back off by 0.000 m, limit 0.010 m<br />
+              Height off by 0.002 m, limit 0.010 m<br />
+              Tilt 40.0 deg, limit 15.0 deg
+            </p>
+          </div>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
+          What to look for: the pass shows all four checks inside their
+          limits, and the fail shows at least one check outside its limit.
+          If the test cannot tell a good place from a bad one, send it back.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a
+            href="/packs/demo-earphone-charger/success-test.py"
+            download="success-test.py"
+            className="rounded-full bg-[#0b0b0c] px-4 py-2 text-sm font-medium text-white hover:bg-[#1d4ed8]"
+          >
+            Download success-test.py
+          </a>
+          <a
+            href="/packs/demo-earphone-charger/forced-pass.txt"
+            download="forced-pass.txt"
+            className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10 hover:bg-[#f6f7f9]"
+          >
+            Download forced-pass.txt
+          </a>
+          <a
+            href="/packs/demo-earphone-charger/forced-fail.txt"
+            download="forced-fail.txt"
+            className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10 hover:bg-[#f6f7f9]"
+          >
+            Download forced-fail.txt
+          </a>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
+          Both results were run in MuJoCo 4.0.1 against the step 13 world,
+          forward kinematics only. Run it yourself: <code className="rounded bg-[#f6f7f9] px-1 font-mono text-xs">python3 success-test.py pass</code>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function UploadFlow() {
   const [taskName, setTaskName] = useState("Sorting cards");
   const [placeName, setPlaceName] = useState("Kitchen");
@@ -314,8 +432,11 @@ export default function UploadFlow() {
           This page runs the workflow as a local demo with local state only. No
           file is sent, no server runs, and no sim run happened. The real
           MuJoCo, Genesis, and eval runs are the next build step, not done here.
-          Times shown are targets from the spec, labeled illustrative, not
-          measured times.
+          One exception: step 13 has a real sample MuJoCo world file, built
+          offline, so you can open it and check it. A second exception: step
+          17 has a real success test with forced pass and forced fail results,
+          run in MuJoCo, so you can read them and check them. Times shown are targets
+          from the spec, labeled illustrative, not measured times.
         </p>
       </div>
 
@@ -480,6 +601,8 @@ export default function UploadFlow() {
             <div className="mt-6 rounded-2xl border border-[#fed7aa] bg-[#fff7ed] p-5">
               <p className="text-xl font-medium">Your turn: step {waitingStep.id}, {waitingStep.title}</p>
               <p className="mt-1 leading-7 text-[#5b5f66]">{waitingStep.plain}</p>
+              {waitingStep.id === 13 && <SimWorldCheck />}
+              {waitingStep.id === 17 && <SuccessTestCheck />}
               <p className="mt-2 text-sm text-[#5b5f66]">Take a look, then tap below to keep going. Nothing moves past this step until you say so.</p>
               <button type="button" onClick={approveCurrent} className="mt-4 rounded-full bg-[#1d4ed8] px-6 py-3 text-base font-medium text-white hover:bg-[#1e40af]">
                 Approve and continue
@@ -532,6 +655,8 @@ export default function UploadFlow() {
                         <p className="mt-1 font-mono text-xs text-[#5b5f66]">
                           Owner: {step.owner} | Target: {step.targetMinutes === 0 ? "as needed" : `${step.targetMinutes} min`} ({step.targetNote}, illustrative)
                         </p>
+                        {step.id === 13 && states[i] !== "queued" && <SimWorldCheck />}
+                        {step.id === 17 && states[i] !== "queued" && <SuccessTestCheck />}
                       </div>
                       <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${STATE_STYLE[states[i]]}`}>
                         {STATE_LABEL[states[i]]}

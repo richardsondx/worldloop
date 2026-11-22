@@ -1,19 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createSessionToken, sessionCookie, verifyToken } from "../../../../lib/auth";
+import { Magic } from "@magic-sdk/admin";
+import { ADMIN_EMAIL, createSessionToken, sessionCookie } from "../../../../lib/auth";
 
-// GET /api/auth/callback?token=... -> checks the magic link, sets the
-// session cookie, and sends the user to the admin page they asked for.
-export async function GET(req: NextRequest) {
-  const token = req.nextUrl.searchParams.get("token") ?? "";
-  const payload = await verifyToken(token, "magic");
-  const login = new URL("/admin/login", req.url);
-  if (!payload) {
-    login.searchParams.set("error", "link");
-    return NextResponse.redirect(login);
+// POST { didToken, next } -> checks the Magic DID token, sets the session
+// cookie, and returns { ok: true, next }. Magic sends the email itself;
+// this route only proves the token came from Magic for the admin address.
+export async function POST(req: NextRequest) {
+  let didToken = "";
+  let next = "/upload";
+  try {
+    const body = (await req.json()) as { didToken?: unknown; next?: unknown };
+    didToken = typeof body.didToken === "string" ? body.didToken : "";
+    if (typeof body.next === "string" && body.next.startsWith("/") && !body.next.startsWith("//")) {
+      next = body.next;
+    }
+  } catch {
+    return NextResponse.json({ ok: false, error: "Bad request." }, { status: 400 });
   }
-  const next = req.nextUrl.searchParams.get("next") ?? "/upload";
-  const dest = next.startsWith("/") && !next.startsWith("//") ? next : "/upload";
-  const res = NextResponse.redirect(new URL(dest, req.url));
-  res.headers.set("Set-Cookie", sessionCookie(await createSessionToken(payload.email)));
+  if (!didToken) {
+    return NextResponse.json({ ok: false, error: "Missing token." }, { status: 400 });
+  }
+
+  const secret = process.env.MAGIC_LINK_SECRET_KEY;
+  if (!secret) {
+    console.error("MAGIC_LINK_SECRET_KEY is not set, cannot verify DID token");
+    return NextResponse.json({ ok: false, error: "Sign-in is not set up yet." }, { status: 500 });
+  }
+
+  let email: string;
+  try {
+    const magic = new Magic(secret);
+    const metadata = await magic.users.getMetadataByToken(didToken);
+    email = (metadata.email ?? "").toLowerCase();
+  } catch (e) {
+    console.error("DID token verification failed", e);
+    return NextResponse.json({ ok: false, error: "link" }, { status: 401 });
+  }
+  if (email !== ADMIN_EMAIL) {
+    return NextResponse.json({ ok: false, error: "link" }, { status: 401 });
+  }
+
+  const res = NextResponse.json({ ok: true, next });
+  res.headers.set("Set-Cookie", sessionCookie(await createSessionToken(email)));
   return res;
 }

@@ -1,18 +1,17 @@
 // Magic-link auth for the WorldLoop admin area.
 //
-// Only one person can sign in: richardsondx@gmail.com. A sign-in link is
-// emailed to that address, and the link carries a signed token. The session
-// is a signed cookie. No database, no passwords, no user table.
+// Only one person can sign in: richardsondx@gmail.com. Magic Link sends the
+// sign-in email; the server proves the DID token came from Magic for that
+// address, then issues the session below. The session is a signed cookie.
+// No database, no passwords, no user table.
 //
 // Tokens are stateless: base64url(payload) + "." + base64url(HMAC-SHA256).
-// Payload is { email, exp, purpose } where purpose is "magic" (15 minutes)
-// or "session" (30 days). Everything here uses WebCrypto, so the same code
+// Payload is { email, exp, purpose } where purpose is "session" (30 days). Everything here uses WebCrypto, so the same code
 // runs in Node route handlers and in Edge middleware.
 
 export const ADMIN_EMAIL = "richardsondx@gmail.com";
 export const SESSION_COOKIE = "worldloop_session";
 export const SESSION_DAYS = 30;
-export const MAGIC_MINUTES = 15;
 
 export function base64urlEncode(bytes: Uint8Array): string {
   let bin = "";
@@ -44,7 +43,7 @@ async function hmacKey(): Promise<CryptoKey> {
   );
 }
 
-export type TokenPurpose = "magic" | "session";
+export type TokenPurpose = "session";
 
 export interface TokenPayload {
   email: string;
@@ -95,10 +94,6 @@ export async function verifyToken(
   } catch {
     return null;
   }
-}
-
-export async function createMagicToken(email: string): Promise<string> {
-  return signToken(email, "magic", MAGIC_MINUTES * 60 * 1000);
 }
 
 export async function createSessionToken(email: string): Promise<string> {

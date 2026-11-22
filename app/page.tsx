@@ -17,10 +17,11 @@ function Logo() {
 }
 
 const NAV = [
+  { href: "#test", label: "The test" },
+  { href: "#library", label: "The library" },
   { href: "#proof", label: "Proof" },
   { href: "#how", label: "How it works" },
   { href: "#pack", label: "The pack" },
-  { href: "#compare", label: "Compare" },
   { href: "#security", label: "Security" },
 ];
 
@@ -44,14 +45,15 @@ export default function Home() {
       <main className="flex-1">
         {/* HERO */}
         <section className="mx-auto max-w-7xl px-5 pb-10 pt-12 sm:px-8 sm:pt-16">
-          <p className="section-label">For sim leads and robotics leads at robot labs</p>
+          <p className="section-label">For the team that ships the robot</p>
           <h1 className="hero-display mt-5 max-w-4xl text-5xl font-medium sm:text-7xl lg:text-8xl">
-            Your robot fails in places you have never tested.
+            Your robot works in your lab. Does it work in their home?
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-8 text-[#5b5f66]">
-            WorldLoop rebuilds your real place in simulation, runs your policy
-            through 100 variations, and hands you the failures before your robot
-            touches the floor.
+            WorldLoop runs your robot through the hard cases in real places
+            like your customer&apos;s: the messy room, the odd angle, the thing
+            out of place. You get back every case where it does the thing
+            right, and every case where it breaks, with the clip to prove it.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#pilot" className="rounded-full bg-[#1d4ed8] px-6 py-3 text-base font-medium text-white hover:bg-[#1e40af]">
@@ -62,9 +64,9 @@ export default function Home() {
             </a>
           </div>
           <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 font-mono text-sm text-[#5b5f66]">
-            <span><strong className="text-[#0b0b0c]">100</strong> variations per task</span>
-            <span><strong className="text-[#0b0b0c]">20</strong> runs per variation set</span>
-            <span><strong className="text-[#0b0b0c]">1</strong> score, with every failure named</span>
+            <span><strong className="text-[#0b0b0c]">Hard cases</strong> your own sim never runs</span>
+            <span><strong className="text-[#0b0b0c]">Every case</strong> passed or failed</span>
+            <span><strong className="text-[#0b0b0c]">Every break</strong> with a clip</span>
           </div>
 
           <div className="mt-10 overflow-hidden rounded-3xl border border-[#e5e7eb] bg-[#f6f7f9]">
@@ -82,10 +84,10 @@ export default function Home() {
         <section className="border-y border-[#e5e7eb] bg-[#f6f7f9]">
           <div className="mx-auto grid max-w-7xl gap-6 px-5 py-10 sm:grid-cols-4 sm:px-8">
             {[
-              ["What it is", "One of your places, rebuilt as a practice world your robot can fail in safely."],
-              ["What you get", "The world, the task, a scored eval, and a failure reel with clips and seeds."],
+              ["What it is", "A test of the hard cases, run in one of your places, rebuilt as a practice world."],
+              ["What you get", "Every case where it did the thing right, and every case where it broke, with a clip behind each one."],
               ["What it costs", "A custom quote. The pilot is free. You see the eval before you pay."],
-              ["How to start", "Send your place, your task, and your policy. We build the first pack."],
+              ["How to start", "Send the film of your place, your task, and your policy. We build the first pack."],
             ].map(([t, d]) => (
               <div key={t}>
                 <p className="section-label">{t}</p>
@@ -95,15 +97,61 @@ export default function Home() {
           </div>
         </section>
 
+        {/* THE TEST */}
+        <section id="test" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
+          <p className="section-label">The test</p>
+          <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight sm:text-5xl">
+            It is not about the world. It is about what we test.
+          </h2>
+          <p className="mt-4 max-w-2xl text-lg leading-8 text-[#5b5f66]">
+            Your lab tests the easy version of the task, in one clean place.
+            We test the hard version: the earphone upside down, the charger
+            behind a book, the room dimmer. One task, broken into its hard
+            variants. Each one passed or failed, with a clip.
+          </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {[
+              ["One task, many hard cases", "We split your task into its variants: the messy room, the odd angle, the thing out of place. Each variant gets a run, and each run gets a verdict."],
+              ["Pass or fail, with proof", "Every case ends passed or failed. The pass rate sits inside the report as one line. The clip is what you check."],
+              ["The cases your lab never runs", "Your own sim runs the happy path. The failures live in the tail, and the tail is what we test."],
+            ].map(([t, d]) => (
+              <div key={t} className="rounded-2xl border border-[#e5e7eb] p-6">
+                <h3 className="text-xl font-medium">{t}</h3>
+                <p className="mt-2 leading-7 text-[#5b5f66]">{d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* THE LIBRARY */}
+        <section id="library" className="border-y border-[#e5e7eb] bg-[#f6f7f9]">
+          <div className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
+            <p className="section-label">The library</p>
+            <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight sm:text-5xl">
+              One lab has one place. Your robot ships to thousands.
+            </h2>
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-[#5b5f66]">
+              One lab can scan its own place. No lab can scan and keep hundreds
+              of real places. Each pack adds one real deployment place to the
+              library, and your place stays yours.
+            </p>
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-[#5b5f66]">
+              Rooms change. We rescan when the room changes, and the rescan is
+              part of the pack.
+            </p>
+          </div>
+        </section>
+
         {/* PROOF */}
         <section id="proof" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
           <p className="section-label">Proof, before you pay</p>
           <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight sm:text-5xl">
-            You do not buy a promise. You buy a score you can check.
+            You do not buy a promise. You buy a report you can check.
           </h2>
           <p className="mt-4 max-w-2xl text-lg leading-8 text-[#5b5f66]">
-            This is what your pilot eval looks like. Same layout, same numbers,
-            your policy and your place instead of the sample.
+            The report lists every case: which ones pass, which ones fail, and
+            the clip behind each one. Same layout, same numbers, your policy
+            and your place instead of the sample.
           </p>
           <div className="mt-10">
             <EvalDemo />
@@ -121,20 +169,20 @@ export default function Home() {
               {[
                 {
                   n: "01",
-                  t: "You send us the place",
-                  d: "Film one task with your phone and scan the room once. Ten minutes, no crew, no rig. You keep the raw files.",
+                  t: "You film the place",
+                  d: "Film one task with your phone and scan the room. No crew, no rig. You keep the raw files.",
                   art: <PackArt />,
                 },
                 {
                   n: "02",
-                  t: "We build the world and run your policy",
-                  d: "Your place becomes a sim world with 100 variations. Your policy runs 20 times per variation set, and every run is logged.",
+                  t: "We build the world and run the hard cases",
+                  d: "Your place becomes a practice world. Your robot runs the cases your own sim never covers: the messy room, the odd angle, the thing out of place. Every run is logged, and every break gets a clip.",
                   art: <EvalArt />,
                 },
                 {
                   n: "03",
-                  t: "You get the eval and the loop",
-                  d: "You get a score, the top failures with clips, and a new test for each failure. The next pack version fixes what the last one found.",
+                  t: "You get the eval",
+                  d: "You get the report: every case where it did the thing right, and every case where it broke, with a clip behind each one. Each failure becomes a new test, and the next pack checks what the last one found.",
                   art: <LoopArt />,
                 },
               ].map((s) => (
@@ -160,7 +208,7 @@ export default function Home() {
               ["The world", "Your place as a sim scene, in MuJoCo, Genesis, and Isaac Lab formats, with a scale note and a mesh that opens clean."],
               ["The task", "One task, written as a spec, with a success test in code. No human watches the run to call it a pass."],
               ["The eval", "Success rate with the run count next to it, mean time, and failure counts by code. No rate without a count."],
-              ["The failure reel", "A clip for each top failure, 10 to 30 seconds, labeled with seed, variation, and stage."],
+              ["The failure reel", "A clip for each failure, 10 to 30 seconds, labeled with seed, variation, and stage."],
               ["The run scripts", "One command to load the world, one to run the eval, one to make variations. Your team reruns it cold."],
               ["The loop", "Each failure becomes a new variation and a new test. The next pack version ships with the fixes checked."],
             ].map(([t, d]) => (
@@ -201,31 +249,6 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
-
-        {/* COMPARE */}
-        <section id="compare" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
-          <p className="section-label">Compare</p>
-          <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight sm:text-5xl">
-            Pick the vendor that sells what you are missing.
-          </h2>
-          <div className="mt-10 divide-y divide-[#e5e7eb] border-y border-[#e5e7eb]">
-            {[
-              ["WorldLoop", "One of your places, rebuilt as a testable world, with a scored eval and a failure loop.", "Custom quote. Pilot free."],
-              ["Scale AI", "Managed data programs, labeling, RLHF, and evals for AI labs. Physical AI data at volume.", "Custom quote. Meta paid $14.3B for 49% in June 2025."],
-              ["Mercor", "Vetted experts by the hour for frontier labs, plus benchmarks for professional work.", "Expert rates $60 to $180 per hour."],
-              ["Build AI", "Hours of first-person video of real work, plus a free open research set.", "$1 per hour for the open research set."],
-            ].map(([name, what, price]) => (
-              <div key={name} className="grid gap-2 py-5 sm:grid-cols-[160px_1fr_260px] sm:gap-6">
-                <p className="text-lg font-medium">{name}</p>
-                <p className="leading-7 text-[#5b5f66]">{what}</p>
-                <p className="font-mono text-sm text-[#5b5f66]">{price}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-4 text-sm text-[#5b5f66]">
-            Scale AI sells trajectories. Mercor sells people. Build AI sells video hours. WorldLoop sells the world your robot practices in.
-          </p>
         </section>
 
         {/* SECURITY */}
@@ -270,7 +293,7 @@ export default function Home() {
               <ul className="mt-6 space-y-3 text-base">
                 <li>Free pilot, one task, one place.</li>
                 <li>Your eval lands in about 2 weeks.</li>
-                <li>You see the score before any price is named.</li>
+                <li>You see the report before any price is named.</li>
               </ul>
             </div>
             <PilotForm />
@@ -299,13 +322,13 @@ export default function Home() {
               <ul className="mt-3 space-y-2">
                 <li><a href="#pack" className="hover:text-[#dbeafe]">The pack</a></li>
                 <li><a href="#proof" className="hover:text-[#dbeafe]">Sample eval</a></li>
+                <li><a href="#test" className="hover:text-[#dbeafe]">The test</a></li>
                 <li><a href="#how" className="hover:text-[#dbeafe]">How it works</a></li>
               </ul>
             </div>
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.14em] text-[#9ca3af]">Company</p>
               <ul className="mt-3 space-y-2">
-                <li><a href="#compare" className="hover:text-[#dbeafe]">Compare</a></li>
                 <li><a href="#security" className="hover:text-[#dbeafe]">Security</a></li>
                 <li><a href="#pilot" className="hover:text-[#dbeafe]">Pilot</a></li>
               </ul>
@@ -331,7 +354,7 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-6 font-mono text-xs text-[#9ca3af]">
             <span>Copyright 2026 WorldLoop. All rights reserved.</span>
-            <span>Sources: scale.com, mercor.com, WorldLoop deep dive, Nov 21, 2026. Sample eval numbers are illustrative.</span>
+            <span>Sources: WorldLoop stress test, Nov 22, 2026. Sample eval numbers are illustrative.</span>
           </div>
         </div>
       </footer>
