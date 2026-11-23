@@ -319,7 +319,7 @@ export default function Home() {
               See a sample eval
             </a>
           </div>
-          <div className="mt-16 grid gap-8 border-t border-white/15 pt-10 text-sm sm:grid-cols-4">
+          <div className="mt-16 grid gap-8 border-t border-white/15 pt-10 text-sm sm:grid-cols-3">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.14em] text-[#9ca3af]">Product</p>
               <ul className="mt-3 space-y-2">
@@ -337,18 +337,11 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-[#9ca3af]">Follow</p>
-              <ul className="mt-3 space-y-2">
-                <li><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="hover:text-[#dbeafe]">LinkedIn</a></li>
-                <li><a href="https://x.com/" target="_blank" rel="noreferrer" className="hover:text-[#dbeafe]">X</a></li>
-              </ul>
-            </div>
-            <div>
               <p className="font-mono text-xs uppercase tracking-[0.14em] text-[#9ca3af]">Legal</p>
               <ul className="mt-3 space-y-2">
-                <li><a href="#top" className="hover:text-[#dbeafe]">Terms of use</a></li>
-                <li><a href="#top" className="hover:text-[#dbeafe]">Privacy policy</a></li>
-                <li><a href="#top" className="hover:text-[#dbeafe]">Cookie preferences</a></li>
+                <li><a href="/terms" className="hover:text-[#dbeafe]">Terms of use</a></li>
+                <li><a href="/privacy" className="hover:text-[#dbeafe]">Privacy policy</a></li>
+                <li><a href="/cookies" className="hover:text-[#dbeafe]">Cookie preferences</a></li>
               </ul>
             </div>
           </div>
@@ -357,7 +350,6 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-6 font-mono text-xs text-[#9ca3af]">
             <span>Copyright 2026 WorldLoop. All rights reserved.</span>
-            <span>Sources: WorldLoop stress test, Nov 22, 2026. Sample eval numbers are illustrative.</span>
           </div>
         </div>
       </footer>
