@@ -26,6 +26,11 @@
   <worldbody>
     <light name="key" pos="1.5 1 2" dir="-0.5 -0.3 -1"
            diffuse="0.9 0.9 0.9" specular="0.3 0.3 0.3" />
+    <!-- Fill from the camera side, so the earphone's front face reads white
+         instead of falling into the key light's shade. Gentle: it lifts the
+         shaded faces without flattening the scene. -->
+    <light name="fill" pos="0.3 -1.5 1.5" dir="0 0.8 -0.5"
+           diffuse="0.75 0.75 0.75" specular="0.1 0.1 0.1" />
     <geom name="floor" type="plane" size="3 3 0.1" material="floor_mat" />
     <camera name="overview" pos="1.6 -1.5 1.5" zaxis="0.55 -0.75 0.37" />
 
@@ -45,12 +50,25 @@
       <site name="dock_target" pos="0 0 0.028" size="0.01" />
     </body>
 
-    <!-- The earphone, free to be grasped. Starts on the table left of the dock. -->
+    <!-- The earphone, free to be grasped. Starts on the table left of the dock.
+         A wireless earbud: a rounded bud head on a small flat base (so it
+         rests flat on the table), a dark speaker mesh dot on its front face,
+         and a stem that tapers toward the tip and leans 20 degrees, like a
+         real earbud. About 31 mm tall, bud about 16 mm wide. The tip site
+         stays at the bud centre, exactly where the judge measures it. -->
     <body name="earphone" pos="0.35 -0.1 0.792">
       <joint name="earphone_free" type="free" />
-      <geom name="bud" type="box" size="0.02 0.012 0.008" pos="0 0 0.008" material="white" />
-      <geom name="stem" type="cylinder" size="0.004 0.012" pos="0.018 0 0.02" material="white" />
-      <site name="earphone_tip" pos="0 0 0.008" size="0.008" />
+      <geom name="bud_base" type="cylinder" size="0.0055 0.0015" pos="0 0 0.0015" material="white" />
+      <geom name="bud" type="sphere" size="0.0075" pos="0 0 0.0075" material="white" />
+      <geom name="mesh" type="sphere" size="0.0018" pos="0 -0.0068 0.008" material="dark" />
+      <geom name="stem_lower" type="cylinder" size="0.0045 0.006" pos="0.00405 0 0.01564" euler="0 0.3491 0" material="white" />
+      <geom name="stem_upper" type="cylinder" size="0.0035 0.0045" pos="0.00696 0 0.02363" euler="0 0.3491 0" material="white" />
+      <geom name="stem_tip" type="sphere" size="0.0035" pos="0.0085 0 0.02786" material="white" />
+      <!-- The tip site stays at exactly (0, 0, 0.008), where the judge
+           measures it. Its rendered size is small (0.002) so it does not
+           show: at the old size 0.008 the renderer drew it as a 16 mm grey
+           ball that swallowed the 15 mm bud and hid the white earphone. -->
+      <site name="earphone_tip" pos="0 0 0.008" size="0.002" />
     </body>
 
     <!-- Simple 3-joint robot arm on the table, with a two-finger gripper. -->
@@ -69,8 +87,14 @@
               <joint name="wrist_roll" type="hinge" axis="1 0 0" range="-1.5 1.5" />
               <geom name="wrist_body" type="sphere" size="0.025" pos="0 0 0.02" material="dark" />
               <body name="gripper" pos="0 0 0.04">
-                <geom name="finger_left" type="box" size="0.006 0.006 0.05" pos="0.015 0 0.03" material="metal" />
-                <geom name="finger_right" type="box" size="0.006 0.006 0.05" pos="-0.015 0 0.03" material="metal" />
+                <body name="finger_left_body" pos="0.032 0 0">
+                  <joint name="finger_left_slide" type="slide" axis="1 0 0" range="-0.025 0.025" />
+                  <geom name="finger_left" type="box" size="0.006 0.006 0.05" pos="0 0 0.03" material="metal" />
+                </body>
+                <body name="finger_right_body" pos="-0.032 0 0">
+                  <joint name="finger_right_slide" type="slide" axis="1 0 0" range="-0.025 0.025" />
+                  <geom name="finger_right" type="box" size="0.006 0.006 0.05" pos="0 0 0.03" material="metal" />
+                </body>
                 <site name="grip_point" pos="0 0 0.08" size="0.01" />
               </body>
             </body>
@@ -85,9 +109,11 @@
     <motor name="m_shoulder_pitch" joint="shoulder_pitch" gear="1" />
     <motor name="m_elbow" joint="elbow" gear="1" />
     <motor name="m_wrist_roll" joint="wrist_roll" gear="1" />
+    <motor name="m_finger_left" joint="finger_left_slide" gear="1" />
+    <motor name="m_finger_right" joint="finger_right_slide" gear="1" />
   </actuator>
 
   <keyframe>
-    <key name="home" qpos="0.35 -0.1 0.792 1 0 0 0 0 -0.5 1.1 0.3" />
+    <key name="home" qpos="0.35 -0.1 0.792 1 0 0 0 0 -0.5 1.1 0.3 0 0" />
   </keyframe>
 </mujoco>

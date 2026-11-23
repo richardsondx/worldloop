@@ -42,16 +42,16 @@ export const WORKFLOW_STEPS: WorkflowStep[] = [
   { id: 12, title: "Sim world build in MuJoCo", plain: "Build the sim scene in MuJoCo first, with a library robot arm.", owner: "Automatic", targetMinutes: 10, targetNote: "Done by 9:30, target" },
   { id: 13, title: "Your check of the first sim world", plain: "Open world.xml, the sample MuJoCo world for this demo task, and check it matches the real place. The preview, the file, and the Mac open steps are on this page.", owner: "You", targetMinutes: 5, targetNote: "Human check" },
   { id: 14, title: "Genesis port", plain: "Port the MuJoCo scene to Genesis. If the port fails, ship MuJoCo only for the first pack.", owner: "Automatic", targetMinutes: 10, targetNote: "Target" },
-  { id: 15, title: "Variation generation", plain: "Make 100 variations of the task from the one room, each with a fixed seed number.", owner: "Automatic", targetMinutes: 15, targetNote: "Done by 10:00, target" },
+  { id: 15, title: "Variation generation", plain: "Make 5 sample variations of the task from the one room, each with the earphone starting in a different spot.", owner: "Automatic", targetMinutes: 15, targetNote: "Done by 10:00, target" },
   { id: 16, title: "Success test in code", plain: "Write the success test before any model runs. It must decide alone, with no human watching.", owner: "Automatic", targetMinutes: 5, targetNote: "Target" },
   { id: 17, title: "Your check of the success test", plain: "Check the test passes a good placement and fails a bad one, then approve it or send it back. The test and both results are on this page.", owner: "You", targetMinutes: 5, targetNote: "Human check" },
-  { id: 18, title: "Eval run", plain: "Run an open model in inference only, 20 runs per task per variation set. No training.", owner: "Automatic", targetMinutes: 30, targetNote: "Runs while you film the next task, target" },
+  { id: 18, title: "Eval run", plain: "In the real flow, run an open model in inference only, 20 runs per task per variation set. No training.", owner: "Automatic", targetMinutes: 30, targetNote: "Runs while you film the next task, target" },
   { id: 19, title: "Failure clip cutting", plain: "Save every run. Cut a short clip for each failure, labeled with seed, variation, and stage.", owner: "Automatic", targetMinutes: 10, targetNote: "Target" },
   { id: 20, title: "Eval report draft", plain: "Draft the eval report from the run data only. No claim without a run and a clip behind it.", owner: "Automatic", targetMinutes: 5, targetNote: "Target" },
-  { id: 21, title: "Your check of the first eval report", plain: "Read page 1, watch the top failure clips, approve or send back before it goes to any lab.", owner: "You", targetMinutes: 10, targetNote: "Human check" },
+  { id: 21, title: "Your check of the first eval report", plain: "Read page 1 of the sample eval report below, check the top failure, approve or send back before it goes to any lab.", owner: "You", targetMinutes: 10, targetNote: "Human check" },
   { id: 22, title: "Packaging", plain: "Build the pack folder. Test it cold: a stranger follows only the README and gets a score.", owner: "Automatic", targetMinutes: 5, targetNote: "Target" },
   { id: 23, title: "Delivery", plain: "The pack folder is ready on disk. No lab contact and no send happen in this run.", owner: "Automatic", targetMinutes: 2, targetNote: "Pack ready by lunch, target" },
-  { id: 24, title: "Failure loop", plain: "Turn the top failure into the next test. You approve the next test before it is built.", owner: "You", targetMinutes: 10, targetNote: "Human approve" },
+  { id: 24, title: "Failure loop", plain: "Read the next test below, built from the top failure. You approve it before it is built.", owner: "You", targetMinutes: 10, targetNote: "Human approve" },
 ];
 
 // Human steps that pause the local demo and wait for Richardson.
@@ -86,7 +86,7 @@ export const PHASES: WorkflowPhase[] = [
   { id: 1, title: "Film it", plain: "Pick a task, film 10 clean takes, scan the room.", steps: [1, 2, 3] },
   { id: 2, title: "Upload it", plain: "Upload once. The check runs, and a bad take is sent back plainly.", steps: [4, 5, 6, 7] },
   { id: 3, title: "Build the world", plain: "The scan becomes a sim world a robot arm can work in.", steps: [8, 9, 10, 11, 12] },
-  { id: 4, title: "Check it, then vary it", plain: "You check the world and the test, then it makes 100 variations.", steps: [13, 14, 15, 16, 17] },
+  { id: 4, title: "Check it, then vary it", plain: "You check the world and the test, then it shows 5 sample variations.", steps: [13, 14, 15, 16, 17] },
   { id: 5, title: "Test it and pack it", plain: "The model runs, failures are clipped, and the pack is ready.", steps: [18, 19, 20, 21, 22, 23, 24] },
 ];
 

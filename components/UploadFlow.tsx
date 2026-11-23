@@ -135,6 +135,16 @@ const MANUAL_PAGES = [
 // Step 13: the sample MuJoCo world for the demo task. Real file, real
 // render, built and checked offline in MuJoCo. The viewer command below
 // was verified to launch: python -m mujoco.viewer --mjcf world.xml.
+// The video is the sim doing the task: reach, grasp, lift, move, place,
+// release, in MuJoCo. The variations are 5 sample starts, not 100.
+const VARIATIONS = [
+  { n: "01", label: "Earphone left, near the arm", file: "variation-01.xml", img: "variation-01.png" },
+  { n: "02", label: "Earphone right, near the dock", file: "variation-02.xml", img: "variation-02.png" },
+  { n: "03", label: "Earphone turned 90 degrees", file: "variation-03.xml", img: "variation-03.png" },
+  { n: "04", label: "Earphone far left", file: "variation-04.xml", img: "variation-04.png" },
+  { n: "05", label: "Earphone turned 180 degrees", file: "variation-05.xml", img: "variation-05.png" },
+];
+
 function SimWorldCheck() {
   return (
     <div className="mt-3 overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white">
@@ -150,6 +160,51 @@ function SimWorldCheck() {
           from your upload. Check the table, the charger dock, the earphone,
           and the arm against the real place.
         </p>
+        <p className="mt-4 text-sm font-medium">The robot doing the task in the sim</p>
+        <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
+          The arm reaches to the earphone, picks it up, carries it to the
+          dock, and sets it down. Sample clip, scripted in MuJoCo, 20 seconds.
+        </p>
+        <video
+          src="/packs/demo-earphone-charger/task-run.mp4"
+          poster="/packs/demo-earphone-charger/task-run-poster.png"
+          controls
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="mt-2 h-auto w-full rounded-xl border border-[#e5e7eb]"
+        />
+        <p className="mt-2 text-sm leading-6 text-[#5b5f66]">
+          Sample clip, scripted, not a policy run. This run did not simulate
+          anything. The carry uses a scripted hold, and the final descent
+          eases the earphone upright.
+        </p>
+        <p className="mt-4 text-sm font-medium">5 sample variations</p>
+        <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
+          The same task with the earphone starting in a different spot. Each
+          one is a real world file you can open and run. They are 5 of the
+          100 runs in a full eval.
+        </p>
+        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
+          {VARIATIONS.map((v) => (
+            <a
+              key={v.n}
+              href={`/packs/demo-earphone-charger/${v.file}`}
+              download={v.file}
+              className="overflow-hidden rounded-xl border border-[#e5e7eb] hover:border-[#1d4ed8]"
+            >
+              <img
+                src={`/packs/demo-earphone-charger/${v.img}`}
+                alt={`Variation ${v.n}: ${v.label}`}
+                className="h-auto w-full"
+              />
+              <span className="block px-2 py-1.5 text-xs leading-4 text-[#5b5f66]">
+                V{v.n}: {v.label}
+              </span>
+            </a>
+          ))}
+        </div>
         <div className="mt-3 flex flex-wrap gap-2">
           <a
             href="/packs/demo-earphone-charger/world.xml"
@@ -162,10 +217,10 @@ function SimWorldCheck() {
         <p className="mt-4 text-sm font-medium">Open it on your Mac</p>
         <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm leading-6 text-[#5b5f66]">
           <li>
-            Install MuJoCo: <code className="rounded bg-[#f6f7f9] px-1 font-mono text-xs">pip install mujoco</code>
+            Install MuJoCo in a venv: <code className="rounded bg-[#f6f7f9] px-1 font-mono text-xs">python3 -m venv mujoco-venv && source mujoco-venv/bin/activate && pip install mujoco</code>
           </li>
           <li>
-            Save world.xml in a folder, open a terminal in that folder, and
+            Save world.xml in your Downloads folder, open a terminal in that folder, and
             run: <code className="rounded bg-[#f6f7f9] px-1 font-mono text-xs">python3 -m mujoco.viewer --mjcf world.xml</code>
           </li>
           <li>
@@ -199,7 +254,7 @@ function CopyCommand({ label, command }: { label: string; command: string }) {
         <button
           type="button"
           onClick={copy}
-          aria-label={`Copy command: ${label}`}
+          aria-label={copied ? `Copied: ${label}` : `Copy command: ${label}`}
           className="flex shrink-0 items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20"
         >
           {copied ? (
@@ -276,17 +331,19 @@ function SuccessTestCheck() {
         <div className="mt-4 rounded-xl border border-[#e5e7eb] bg-[#f6f7f9] p-3">
           <p className="text-sm font-medium">Run it yourself on your Mac</p>
           <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
-            Download success-test.py and world.xml into the same folder first.
-            The test reads the dock target from world.xml, so the two files
+            Download success-test.py and world.xml into your Downloads folder
+            first. The test reads the dock target from world.xml, so the two files
             must sit together. It works with or without MuJoCo. Tap Copy on a
             command, paste it into your terminal, and press Enter.
           </p>
+          <CopyCommand label="Create the venv once, in Downloads" command="cd ~/Downloads && python3 -m venv mujoco-venv && source mujoco-venv/bin/activate && pip install mujoco" />
           <CopyCommand label="Open the world in MuJoCo again" command="cd ~/Downloads && source mujoco-venv/bin/activate && python3 -m mujoco.viewer --mjcf world.xml" />
           <CopyCommand label="Run the test with MuJoCo" command="cd ~/Downloads && source mujoco-venv/bin/activate && python3 success-test.py pass" />
           <CopyCommand label="Run the test without MuJoCo (plain Python)" command="python3 success-test.py pass --engine geometric" />
           <p className="mt-2 text-sm leading-6 text-[#5b5f66]">
             Swap pass for fail to run the bad placement. Both print their
-            verdict at the end.
+            verdict at the end. The bad placement run ends with exit code 1.
+            That is the fail, not a crash.
           </p>
         </div>
         <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
@@ -331,9 +388,112 @@ function SuccessTestCheck() {
   );
 }
 
+// Step 21: page 1 of a sample eval report. Same sample numbers as the
+// landing page (62 of 100), with the earphone task in place of the card
+// task. Labeled as a sample everywhere: no eval ran in this demo.
+const SAMPLE_FUNNEL = [
+  { label: "Reached the earphone", count: 98 },
+  { label: "Grasped the earphone", count: 81 },
+  { label: "Lifted the earphone", count: 70 },
+  { label: "Placed in the dock", count: 62 },
+];
+const SAMPLE_FAILURES = [
+  { label: "Missed grasp", count: 14, detail: "The gripper closed 2 cm short of the earphone edge, on the smooth side. Fix: move the approach 2 cm lower and slow the last 10 cm." },
+  { label: "Slipped on lift", count: 11, detail: "The earphone left the table, then slipped as the arm rotated. Fix: add 0.4 s of settle time before the lift." },
+  { label: "Timed out", count: 7, detail: "The policy spent 60 seconds searching for an earphone it had already passed. Fix: cap the search sweep at 20 seconds." },
+  { label: "Placed outside the dock", count: 6, detail: "The drop point drifted 4 cm past the dock edge on hard variations. Fix: re-check the dock center after each variation." },
+];
+
+function SampleEvalCheck() {
+  const [open, setOpen] = useState(0);
+  return (
+    <div className="mt-3 overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white">
+      <div className="p-4">
+        <p className="font-medium">Page 1 of the sample eval report</p>
+        <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
+          Sample report, example only. No eval ran in this demo, so there is
+          no real report to check. This is what page 1 looks like: the score,
+          where it got through, and where it failed.
+        </p>
+        <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
+          <span className="font-medium text-[#0b0b0c]">Your job here: </span>
+          check the score has a run count next to it, check the top failure
+          names what broke, and check every claim has a run behind it. If it
+          does, approve. If the report claims a pass with no run behind it,
+          tap &quot;This looks wrong&quot;.
+        </p>
+        <p className="mt-4 font-mono text-sm text-[#5b5f66]">SAMPLE EVAL, EXAMPLE ONLY</p>
+        <p className="mt-1 text-5xl font-medium tracking-tight">62<span className="text-[#5b5f66]"> / 100</span></p>
+        <p className="mt-1 text-sm leading-6 text-[#5b5f66]">Your policy passed 62 of 100 runs of putting the earphone in its charger.</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-[#e5e7eb] p-3">
+            <p className="text-sm font-medium">Where it got through</p>
+            <ul className="mt-2 space-y-1.5 text-sm">
+              {SAMPLE_FUNNEL.map((f) => (
+                <li key={f.label} className="flex justify-between"><span>{f.label}</span><strong className="font-mono">{f.count}</strong></li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-xl border border-[#e5e7eb] p-3">
+            <p className="text-sm font-medium">Where it failed, tap a row</p>
+            <ul className="mt-2 space-y-1.5">
+              {SAMPLE_FAILURES.map((r, i) => (
+                <li key={r.label}>
+                  <button type="button" onClick={() => setOpen(i)} aria-expanded={open === i} className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm ${open === i ? "bg-[#ffedd5]" : "bg-[#f6f7f9] hover:bg-[#ffedd5]"}`}>
+                    <span>{r.label}</span>
+                    <strong className="font-mono text-[#ea580c]">{r.count}</strong>
+                  </button>
+                  {open === i && <p className="px-3 pt-2 text-sm leading-6 text-[#5b5f66]">{r.detail}</p>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-[#5b5f66]">
+          In a real eval, each failure row links to a 10 to 30 second clip.
+          The clips are not recorded in this demo.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Step 24: the next test, built from the top failure of the sample eval.
+// Sample, example only: the demo ran no eval, so there is no real top
+// failure and no real next test. This shows what you would approve.
+function SampleLoopCheck() {
+  return (
+    <div className="mt-3 overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white">
+      <div className="p-4">
+        <p className="font-medium">The next test, from the top failure</p>
+        <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
+          Sample, example only. The loop turns the top failure into the next
+          test, so the pack keeps getting better. Your job here: read the
+          test below and check it aims at the failure. If it does, approve.
+          If it tests something else, tap &quot;This looks wrong&quot;.
+        </p>
+        <div className="mt-3 rounded-xl border border-[#fecaca] bg-[#fef2f2] p-3">
+          <p className="text-sm font-medium text-[#991b1b]">Top failure: Missed grasp, 14 runs</p>
+          <p className="mt-1 text-sm leading-6 text-[#991b1b]">
+            The gripper closed 2 cm short of the earphone edge, on the smooth side.
+          </p>
+        </div>
+        <div className="mt-3 rounded-xl border border-[#bbf7d0] bg-[#f0fdf4] p-3">
+          <p className="text-sm font-medium text-[#166534]">Next test to approve</p>
+          <p className="mt-1 text-sm leading-6 text-[#166534]">
+            The earphone starts 2 cm farther from the gripper, 20 runs. The
+            gripper approaches 2 cm lower and slows in the last 10 cm.
+            Approve it and it gets built into the next pack.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function UploadFlow() {
-  const [taskName, setTaskName] = useState("Sorting cards");
-  const [placeName, setPlaceName] = useState("Kitchen");
+  const [taskName, setTaskName] = useState("Putting earphone in charger");
+  const [placeName, setPlaceName] = useState("Living Room");
   const [video, setVideo] = useState<File | null>(null);
   const [scan, setScan] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -376,7 +536,14 @@ export default function UploadFlow() {
     }
     const step = WORKFLOW_STEPS[next];
     if (step.id === 7) {
-      // Step 7 only runs on reject, skip it on a clean run.
+      // Step 7 only runs on reject, skip it on a clean run. Mark it done
+      // here, not needed, so phase 2 turns green as soon as the upload
+      // passes, instead of waiting for the end of the run.
+      setStates((prev) => {
+        const copy = [...prev];
+        copy[6] = "done";
+        return copy;
+      });
       advance(next);
       return;
     }
@@ -406,7 +573,7 @@ export default function UploadFlow() {
     setError("");
     setReject(null);
     if (!taskName.trim() || !placeName.trim()) {
-      setError("Add a task name and a place name first. Example task: Sorting cards. Example place: Kitchen.");
+      setError("Add a task name and a place name first. Example task: Putting earphone in charger. Example place: Living Room.");
       return;
     }
     const result = validateUpload(video, scan);
@@ -526,15 +693,9 @@ export default function UploadFlow() {
       <div className="mt-6 rounded-2xl border border-[#dbeafe] bg-[#eff6ff] p-5">
         <p className="font-medium">Local demo, nothing leaves this browser.</p>
         <p className="mt-1 leading-7 text-[#5b5f66]">
-          This page runs the workflow as a local demo with local state only. No
-          file is sent, no server runs, and no sim run happened. The real
-          MuJoCo, Genesis, and eval runs are the next build step, not done here.
-          One exception: step 13 has a real sample MuJoCo world file, built
-          offline, so you can open it and check it. A second exception: step
-          17 has a real success test with a good placement that passes and a
-          bad placement that fails, run in MuJoCo, so you can read them and
-          check them. Times shown are targets from the spec, labeled
-          illustrative, not measured times.
+          No file is sent, no server runs. Steps 13 and 17 hold real files you
+          can open and check: a MuJoCo world and a success test. Times shown
+          are targets, not measured.
         </p>
       </div>
 
@@ -589,11 +750,11 @@ export default function UploadFlow() {
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block text-sm font-medium">
               Task name
-              <input value={taskName} onChange={(e) => setTaskName(e.target.value)} className={`${input} mt-1`} placeholder="Sorting cards" />
+              <input value={taskName} onChange={(e) => setTaskName(e.target.value)} className={`${input} mt-1`} placeholder="Putting earphone in charger" />
             </label>
             <label className="block text-sm font-medium">
               Place name
-              <input value={placeName} onChange={(e) => setPlaceName(e.target.value)} className={`${input} mt-1`} placeholder="Kitchen" />
+              <input value={placeName} onChange={(e) => setPlaceName(e.target.value)} className={`${input} mt-1`} placeholder="Living Room" />
             </label>
           </div>
 
@@ -703,6 +864,8 @@ export default function UploadFlow() {
               <p className="mt-1 leading-7 text-[#5b5f66]">{waitingStep.plain}</p>
               {waitingStep.id === 13 && <SimWorldCheck />}
               {waitingStep.id === 17 && <SuccessTestCheck />}
+              {waitingStep.id === 21 && <SampleEvalCheck />}
+              {waitingStep.id === 24 && <SampleLoopCheck />}
               <p className="mt-2 text-sm text-[#5b5f66]">
                 Nothing moves past this step until you say so.{" "}
                 {nextCheck
@@ -738,9 +901,13 @@ export default function UploadFlow() {
             <div className="mt-6 rounded-2xl bg-[#dcfce7] p-6">
               <p className="text-xl font-medium">Done: all 24 steps shown.</p>
               <p className="mt-2 leading-7 text-[#5b5f66]">
-                This is a demo of the workflow order only. No sim run happened,
-                no eval ran, and no pack folder was built. The next build step
-                is the real MuJoCo, Genesis, and eval runs.
+                This run did not run a sim or build a pack from your upload. It
+                shows the workflow order, with real sample files at steps 13 and 17.
+              </p>
+              <p className="mt-2 leading-7">
+                <a href="/packs/demo-earphone-charger" className="font-medium text-[#1d4ed8] hover:underline">
+                  See what a pack looks like: the sample pack for this task.
+                </a>
               </p>
               <button type="button" onClick={reset} className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">
                 Upload another capture
@@ -781,6 +948,8 @@ export default function UploadFlow() {
                         </p>
                         {step.id === 13 && states[i] !== "queued" && <SimWorldCheck />}
                         {step.id === 17 && states[i] !== "queued" && <SuccessTestCheck />}
+                        {step.id === 21 && states[i] !== "queued" && <SampleEvalCheck />}
+                        {step.id === 24 && states[i] !== "queued" && <SampleLoopCheck />}
                       </div>
                       <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${STATE_STYLE[states[i]]}`}>
                         {STATE_LABEL[states[i]]}
@@ -792,8 +961,8 @@ export default function UploadFlow() {
             </div>
           ))}
 
-          <div className="mt-8 rounded-2xl border border-[#e5e7eb] p-5">
-            <p className="font-medium">The 8 reject lines</p>
+          <details className="mt-8 rounded-2xl border border-[#e5e7eb] p-5">
+            <summary className="cursor-pointer font-medium">The 8 reject lines</summary>
             <p className="mt-1 text-sm leading-6 text-[#5b5f66]">
               A take passes only when it clears every line. A fail stops the
               workflow, keeps your files, and tells you what to fix.
@@ -810,7 +979,7 @@ export default function UploadFlow() {
               missing, wrong, or broken to see that reject line here. A real
               check reads the video frames, which this demo does not do.
             </p>
-          </div>
+          </details>
         </div>
       )}
 

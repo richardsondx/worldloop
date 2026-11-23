@@ -31,7 +31,7 @@ const plexMono = localFont({
 export const metadata: Metadata = {
   title: "WorldLoop: The practice world for physical AI",
   description:
-    "WorldLoop rebuilds your real place in simulation, runs your policy through 100 variations, and hands you the failures before your robot touches the floor.",
+    "WorldLoop rebuilds your real place in simulation, runs your policy through 100 variations in a full eval, and hands you the failures before your robot touches the floor.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

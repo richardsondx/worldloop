@@ -53,7 +53,7 @@ export default function Home() {
             WorldLoop runs your robot through the hard cases in real places
             like your customer&apos;s: the messy room, the odd angle, the thing
             out of place. You get back every case where it does the thing
-            right, and every case where it breaks, with the clip to prove it.
+            right, and every case where it breaks, with the clip to prove it, in a full eval.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#pilot" className="rounded-full bg-[#1d4ed8] px-6 py-3 text-base font-medium text-white hover:bg-[#1e40af]">
@@ -66,7 +66,7 @@ export default function Home() {
           <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 font-mono text-sm text-[#5b5f66]">
             <span><strong className="text-[#0b0b0c]">Hard cases</strong> your own sim never runs</span>
             <span><strong className="text-[#0b0b0c]">Every case</strong> passed or failed</span>
-            <span><strong className="text-[#0b0b0c]">Every break</strong> with a clip</span>
+            <span><strong className="text-[#0b0b0c]">Every break</strong> with a clip, in a full eval</span>
           </div>
 
           <div className="mt-10 overflow-hidden rounded-3xl border border-[#e5e7eb] bg-[#f6f7f9]">
@@ -74,7 +74,7 @@ export default function Home() {
               <Hero />
             </div>
             <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#e5e7eb] bg-white px-5 py-3 text-sm text-[#5b5f66]">
-              <span>Two carbon hands, one cloth, one fold. This is a live simulation render, not a video.</span>
+              <span>Two carbon hands, one cloth, one fold. This is a live render, not a video.</span>
               <span className="font-mono text-xs">CARBON HANDS, FOLDING CLOTHES, SIM</span>
             </div>
           </div>
@@ -85,7 +85,7 @@ export default function Home() {
           <div className="mx-auto grid max-w-7xl gap-6 px-5 py-10 sm:grid-cols-4 sm:px-8">
             {[
               ["What it is", "A test of the hard cases, run in one of your places, rebuilt as a practice world."],
-              ["What you get", "Every case where it did the thing right, and every case where it broke, with a clip behind each one."],
+              ["What you get", "Every case where it did the thing right, and every case where it broke, with a clip behind each one, in a full eval."],
               ["What it costs", "A custom quote. The pilot is free. You see the eval before you pay."],
               ["How to start", "Send the film of your place, your task, and your policy. We build the first pack."],
             ].map(([t, d]) => (
@@ -107,12 +107,12 @@ export default function Home() {
             Your lab tests the easy version of the task, in one clean place.
             We test the hard version: the earphone upside down, the charger
             behind a book, the room dimmer. One task, broken into its hard
-            variants. Each one passed or failed, with a clip.
+            variants. Each one passed or failed, with a clip, in a full eval.
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             {[
               ["One task, many hard cases", "We split your task into its variants: the messy room, the odd angle, the thing out of place. Each variant gets a run, and each run gets a verdict."],
-              ["Pass or fail, with proof", "Every case ends passed or failed. The pass rate sits inside the report as one line. The clip is what you check."],
+              ["Pass or fail, with proof", "Every case ends passed or failed. The pass rate sits inside the report as one line. In a full eval, the clip is what you check."],
               ["The cases your lab never runs", "Your own sim runs the happy path. The failures live in the tail, and the tail is what we test."],
             ].map(([t, d]) => (
               <div key={t} className="rounded-2xl border border-[#e5e7eb] p-6">
@@ -150,12 +150,15 @@ export default function Home() {
           </h2>
           <p className="mt-4 max-w-2xl text-lg leading-8 text-[#5b5f66]">
             The report lists every case: which ones pass, which ones fail, and
-            the clip behind each one. Same layout, same numbers, your policy
+            the clip behind each one, in a full eval. Same layout, same kinds of numbers, your policy
             and your place instead of the sample.
           </p>
           <div className="mt-10">
             <EvalDemo />
           </div>
+          <p className="mt-6 text-base leading-7">
+            See the sample pack: <a href="/packs/demo-earphone-charger" className="font-medium text-[#1d4ed8] hover:underline">Putting an earphone in its charger</a>, and the <a href="/packs/demo-earphone-charger/report" className="font-medium text-[#1d4ed8] hover:underline">sample eval report</a> (62 of 100, PDF included).
+          </p>
         </section>
 
         {/* HOW IT WORKS */}
@@ -176,13 +179,13 @@ export default function Home() {
                 {
                   n: "02",
                   t: "We build the world and run the hard cases",
-                  d: "Your place becomes a practice world. Your robot runs the cases your own sim never covers: the messy room, the odd angle, the thing out of place. Every run is logged, and every break gets a clip.",
+                  d: "Your place becomes a practice world. Your robot runs the cases your own sim never covers: the messy room, the odd angle, the thing out of place. Every run is logged, and every break gets a clip, in a full eval.",
                   art: <EvalArt />,
                 },
                 {
                   n: "03",
                   t: "You get the eval",
-                  d: "You get the report: every case where it did the thing right, and every case where it broke, with a clip behind each one. Each failure becomes a new test, and the next pack checks what the last one found.",
+                  d: "You get the report: every case where it did the thing right, and every case where it broke, with a clip behind each one, in a full eval. Each failure becomes a new test, and the next pack checks what the last one found.",
                   art: <LoopArt />,
                 },
               ].map((s) => (
@@ -205,11 +208,11 @@ export default function Home() {
           </h2>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              ["The world", "Your place as a sim scene, in MuJoCo, Genesis, and Isaac Lab formats, with a scale note and a mesh that opens clean."],
+              ["The world", "Your place as a sim scene, in MuJoCo format, with a scale note and a mesh that opens clean. The demo pack ships MuJoCo only."],
               ["The task", "One task, written as a spec, with a success test in code. No human watches the run to call it a pass."],
-              ["The eval", "Success rate with the run count next to it, mean time, and failure counts by code. No rate without a count."],
-              ["The failure reel", "A clip for each failure, 10 to 30 seconds, labeled with seed, variation, and stage."],
-              ["The run scripts", "One command to load the world, one to run the eval, one to make variations. Your team reruns it cold."],
+              ["The eval", "Success rate with the run count next to it, and failure counts by code. No rate without a count."],
+              ["The failure reel", "In a full eval, a clip for each failure, 10 to 30 seconds, labeled with seed, variation, and stage."],
+              ["The run scripts", "The demo pack ships the world file and the judge script. One-command run scripts ship with the full eval."],
               ["The loop", "Each failure becomes a new variation and a new test. The next pack version ships with the fixes checked."],
             ].map(([t, d]) => (
               <div key={t} className="rounded-2xl border border-[#e5e7eb] p-6">
@@ -292,7 +295,7 @@ export default function Home() {
               </p>
               <ul className="mt-6 space-y-3 text-base">
                 <li>Free pilot, one task, one place.</li>
-                <li>Your eval lands in about 2 weeks.</li>
+                <li>Your eval date is confirmed when your pilot starts.</li>
                 <li>You see the report before any price is named.</li>
               </ul>
             </div>

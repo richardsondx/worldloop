@@ -45,9 +45,12 @@ export default function PilotForm() {
       <div className="rounded-2xl bg-[#dcfce7] p-6">
         <p className="text-xl font-medium">Your pilot request is saved on this device.</p>
         <p className="mt-2 leading-7 text-[#5b5f66]">
-          In the live site this goes to the WorldLoop pilot queue, and you get a
-          reply within 2 working days with a time to walk your place. This demo
-          form sends nothing, so nothing leaves your browser.
+          No one was contacted. This demo form sends nothing, so your request
+          sits only on this device. To start a real pilot, email{" "}
+          <a href="mailto:richardsondx@gmail.com" className="font-medium text-[#1d4ed8] hover:underline">
+            richardsondx@gmail.com
+          </a>
+          .
         </p>
         <button
           type="button"
@@ -63,6 +66,15 @@ export default function PilotForm() {
   const input = "w-full rounded-xl border border-[#e5e7eb] bg-white px-4 py-3 text-base outline-none focus:border-[#1d4ed8] focus:ring-2 focus:ring-[#dbeafe]";
   return (
     <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
+      <p className="text-base leading-7 sm:col-span-2">
+        <strong className="font-medium">Demo form.</strong> This saves your
+        request on this device only. It sends nothing to WorldLoop. To request
+        a real pilot, email{" "}
+        <a href="mailto:richardsondx@gmail.com" className="font-medium text-[#1d4ed8] hover:underline">
+          richardsondx@gmail.com
+        </a>
+        .
+      </p>
       <label className="block text-sm font-medium">
         Your name
         <input required value={form.name} onChange={set("name")} className={`${input} mt-1`} placeholder="Ada Lovelace" autoComplete="name" />
@@ -89,7 +101,7 @@ export default function PilotForm() {
       </label>
       <div className="sm:col-span-2">
         <button type="submit" className="rounded-full bg-[#1d4ed8] px-6 py-3 text-base font-medium text-white hover:bg-[#1e40af]">
-          Request a free pilot
+          Save this request on this device
         </button>
         <p className="mt-3 text-sm text-[#5b5f66]">
           Saved in this browser only. No email is sent from this demo form.
